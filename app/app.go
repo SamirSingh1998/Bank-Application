@@ -6,16 +6,19 @@ import (
 )
 
 func Start() {
-	//define routes
-	http.HandleFunc("/greet", greet)
 
-	http.HandleFunc("/customers", getAllCustomer)
+	mux := http.NewServeMux()
+	
+	//define routes
+	mux.HandleFunc("/greet", greet)
+
+	mux.HandleFunc("/customers", getAllCustomer)
 
 	//starting server
 	//Listen and Serve starts the server at localhost:port and second parameter is handler which is a request multiplexer, and since we are relying on default so we will keep it as nil.
 	//http.ListenAndServe("localhost:8000", nil) //To ensure that your program runs continuously, you can run the http.ListenAndServe function call in a separate goroutine.
 	go func() {
-		if err := http.ListenAndServe("localhost:8000", nil); err != nil {
+		if err := http.ListenAndServe("localhost:8000", mux); err != nil {
 			log.Fatal(err)
 		}
 	}()
